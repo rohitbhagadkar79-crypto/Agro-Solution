@@ -1,6 +1,6 @@
-# [Project name]
+# PATIL AGRO SOLUTION
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+An AI-assisted field desk for Indian farmers to understand crop health, soil reports, weather, and next steps.
 
 ## Run & Operate
 
@@ -22,15 +22,20 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/patil-agro-solution/src/components/patil-app.tsx` — farmer dashboard and feature pages
+- `artifacts/patil-agro-solution/src/index.css` — Field Ledger visual system and responsive styles
+- `lib/api-spec/openapi.yaml` — API contract for dashboard, crops, reports, soil reports, and alerts
+- `artifacts/api-server/src/routes/agro.ts` — demo-backed agriculture API routes
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- AI crop and nutrient results are presented as visual predictions with confidence, never as laboratory measurements.
+- The frontend uses the generated API hooks and graceful API-unavailable states so the main journeys remain understandable during service outages.
+- The initial agriculture API uses a small in-memory seed dataset to make the first build immediately usable; persistent PostgreSQL storage can replace it without changing the frontend contract.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Farmers can review a field dashboard, weather and alerts, scan crop or leaf images, enter laboratory soil values, manage crops, use the multilingual assistant, and browse saved reports.
 
 ## User preferences
 

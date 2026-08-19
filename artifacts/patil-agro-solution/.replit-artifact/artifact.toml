@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Patil Agro Solution"
+description = "A farmer-friendly AI agriculture companion for Indian farmers to scan crops, understand soil health, get weather-aware guidance, manage crops, and save farming reports in Marathi, Hindi, and English."
+version = "1.0.0"
+id = "artifacts/patil-agro-solution"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24415
+
+[services.development]
+run = "pnpm --filter @workspace/patil-agro-solution run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/patil-agro-solution", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/patil-agro-solution/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24415"
+BASE_PATH = "/"

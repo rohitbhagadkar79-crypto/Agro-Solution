@@ -10,6 +10,16 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Farmer dashboard
+  - name: crops
+    description: Crop management
+  - name: reports
+    description: Crop health reports
+  - name: soil
+    description: Soil health records
+  - name: alerts
+    description: Farming alerts
 paths:
   /healthz:
     get:
@@ -24,6 +34,108 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get dashboard overview
+      responses:
+        "200":
+          description: Dashboard overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+  /crops:
+    get:
+      operationId: listCrops
+      tags: [crops]
+      summary: List farmer crops
+      responses:
+        "200":
+          description: Crop list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Crop"
+    post:
+      operationId: createCrop
+      tags: [crops]
+      summary: Add a crop
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CropInput"
+      responses:
+        "201":
+          description: Crop created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Crop"
+  /reports:
+    get:
+      operationId: listReports
+      tags: [reports]
+      summary: List saved crop health reports
+      responses:
+        "200":
+          description: Report list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Report"
+  /soil-reports:
+    get:
+      operationId: listSoilReports
+      tags: [soil]
+      summary: List laboratory soil reports
+      responses:
+        "200":
+          description: Soil report list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SoilReport"
+    post:
+      operationId: createSoilReport
+      tags: [soil]
+      summary: Save a laboratory soil report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SoilReportInput"
+      responses:
+        "201":
+          description: Soil report created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SoilReport"
+  /alerts:
+    get:
+      operationId: listAlerts
+      tags: [alerts]
+      summary: List farming alerts
+      responses:
+        "200":
+          description: Alert list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +145,112 @@ components:
           type: string
       required:
         - status
+    Dashboard:
+      type: object
+      required: [farmerName, location, weather, activeCrops, alerts, recentReports]
+      properties:
+        farmerName: { type: string }
+        location: { type: string }
+        weather:
+          $ref: "#/components/schemas/Weather"
+        activeCrops:
+          type: array
+          items:
+            $ref: "#/components/schemas/Crop"
+        alerts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Alert"
+        recentReports:
+          type: array
+          items:
+            $ref: "#/components/schemas/Report"
+    Crop:
+      type: object
+      required: [id, name, variety, area, stage, sowingDate, health]
+      properties:
+        id: { type: number }
+        name: { type: string }
+        variety: { type: string }
+        area: { type: string }
+        stage: { type: string }
+        sowingDate: { type: string }
+        health: { type: string }
+    CropInput:
+      type: object
+      required: [name, variety, area, stage, sowingDate]
+      properties:
+        name: { type: string, minLength: 1 }
+        variety: { type: string, minLength: 1 }
+        area: { type: string, minLength: 1 }
+        stage: { type: string, minLength: 1 }
+        sowingDate: { type: string, minLength: 1 }
+    Weather:
+      type: object
+      required: [temperature, condition, humidity, rainProbability, windSpeed, forecast]
+      properties:
+        temperature: { type: number }
+        condition: { type: string }
+        humidity: { type: number }
+        rainProbability: { type: number }
+        windSpeed: { type: number }
+        forecast:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForecastDay"
+    ForecastDay:
+      type: object
+      required: [day, condition, high, low, rain]
+      properties:
+        day: { type: string }
+        condition: { type: string }
+        high: { type: number }
+        low: { type: number }
+        rain: { type: number }
+    Alert:
+      type: object
+      required: [id, kind, title, description, severity, time]
+      properties:
+        id: { type: number }
+        kind: { type: string }
+        title: { type: string }
+        description: { type: string }
+        severity: { type: string }
+        time: { type: string }
+    Report:
+      type: object
+      required: [id, crop, date, disease, diseaseConfidence, nutrient, nutrientConfidence, summary]
+      properties:
+        id: { type: number }
+        crop: { type: string }
+        date: { type: string }
+        disease: { type: string }
+        diseaseConfidence: { type: number }
+        nutrient: { type: string }
+        nutrientConfidence: { type: number }
+        summary: { type: string }
+        imageUrl: { type: ["string", "null"] }
+    SoilReport:
+      type: object
+      required: [id, date, field, nitrogen, phosphorus, potassium, ph, organicCarbon, status]
+      properties:
+        id: { type: number }
+        date: { type: string }
+        field: { type: string }
+        nitrogen: { type: number }
+        phosphorus: { type: number }
+        potassium: { type: number }
+        ph: { type: number }
+        organicCarbon: { type: number }
+        status: { type: string }
+    SoilReportInput:
+      type: object
+      required: [field, nitrogen, phosphorus, potassium, ph, organicCarbon]
+      properties:
+        field: { type: string, minLength: 1 }
+        nitrogen: { type: number, minimum: 0 }
+        phosphorus: { type: number, minimum: 0 }
+        potassium: { type: number, minimum: 0 }
+        ph: { type: number, minimum: 0, maximum: 14 }
+        organicCarbon: { type: number, minimum: 0 }
 

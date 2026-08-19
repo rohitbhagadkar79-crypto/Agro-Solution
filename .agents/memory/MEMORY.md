@@ -1,0 +1,1 @@
+- [Agriculture safety language](agriculture-safety.md) — keep visual AI predictions distinct from laboratory measurements and pesticide guidance.
