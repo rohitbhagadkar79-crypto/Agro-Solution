@@ -1,0 +1,24 @@
+kind = "mobile"
+previewPath = "/mobile/"
+title = "Patil Agro Solution Mobile"
+description = "An Android-first mobile farming companion for Indian farmers to review crop health, soil reports, weather, alerts, crops, and safe AI guidance in Marathi, Hindi, and English."
+version = "1.0.0"
+id = "artifacts/patil-agro-mobile"
+router = "expo-domain"
+
+[[services]]
+name = "expo"
+ensurePreviewReachable = "/status"
+paths = [ "/mobile/" ]
+localPort = 25549
+
+[services.development]
+run = "pnpm --filter @workspace/patil-agro-mobile run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/patil-agro-mobile", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/patil-agro-mobile", "run", "serve" ]
+
+[services.env]
+PORT = "25549"
+BASE_PATH = "/mobile/"
