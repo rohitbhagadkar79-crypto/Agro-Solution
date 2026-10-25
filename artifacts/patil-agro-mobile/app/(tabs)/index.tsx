@@ -15,7 +15,7 @@ const actionLabels: Record<Action, { label: string; icon: keyof typeof Feather.g
   soil: { label: 'Soil health', icon: 'activity' },
   weather: { label: 'Weather', icon: 'cloud-rain' },
   assistant: { label: 'Ask Patil AI', icon: 'message-circle' },
-  crops: { label: 'My crops', icon: 'sprout' },
+  crops: { label: 'My crops', icon: 'sun' },
   reports: { label: 'My reports', icon: 'file-text' },
   alerts: { label: 'Alerts', icon: 'bell' },
 };
